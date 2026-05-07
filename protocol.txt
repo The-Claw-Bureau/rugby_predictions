@@ -1,0 +1,37 @@
+<<<<<<< HEAD
+1. Run B365 scraper - This will update the odds and events/scores
+2. Run mapping
+3. Run update events from B365 scraper
+4. Run event deltas
+5. Run prediction models
+6. Update kve odds
+7. Run bbdb data script
+8. Update view_events, event_deltas, event_odds_b365
+
+
+=======
+<<<<<<< HEAD
+1. Run B365 scraper - This will update the odds and events/scores
+2. Run mapping
+3. Run update events from B365 scraper
+4. Run event deltas
+5. Run prediction models
+6. Update kve odds
+7. Run bbdb data script
+8. Update view_events, event_deltas, event_odds_b365
+
+
+=======
+1. Run B365 scraper - This will update the odds and events/scores
+2. Run mapping
+3. Run update events from B365 scraper
+4. Run event deltas
+5. Run prediction models
+6. Update kve odds
+7. Run bbdb data script
+8. Update view_events, event_deltas, event_odds_b365
+
+
+>>>>>>> 825caadcc8fc0bfa5fc0e6aa4ecb597dcbdc9c21
+>>>>>>> 92ff3c1b338323c0b4e0114b05ee64a167b91aa7
+1. Check regulaly for new team/comp ids being added by scraper

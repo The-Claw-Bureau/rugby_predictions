@@ -1,0 +1,30 @@
+# Core Libraries
+pandas==2.0.3
+numpy==1.23.0
+psycopg2==2.8.6
+
+# Azure Blob Storage
+azure-storage-blob==12.8.1
+
+# TensorFlow and Add-ons
+tensorflow==2.13.0
+tensorflow-addons==0.21.0
+tensorflow-probability==0.12.2
+
+# Scikit-learn and Related Tools
+scikit-learn==1.0.2
+shap==0.44.1
+
+# SciPy and Optimization
+scipy==1.10.1
+
+# Preprocessing and Data Handling
+pytz==2024.2
+joblib==1.4.2
+
+# Serialization
+pickle5==0.0.11  # Pickle isn't always versioned separately, but if needed
+
+# Miscellaneous
+requests==2.26.0
+uuid==1.30

@@ -1,0 +1,544 @@
+CREATE OR REPLACE VIEW public.view_event
+AS WITH event_source_detailed AS (
+         SELECT es.id,
+            es.source_id,
+            es.event_id,
+            ((t1_1.name::text || ' vs '::text) || t2_1.name::text)::character varying AS name,
+            es.home_team_external_id,
+            es.away_team_external_id,
+            es.competition_external_id,
+            es.start_time,
+            es.end_time,
+            es.status,
+            es.external_id,
+            es.type,
+            es.home_score,
+            es.away_score,
+            es.home_halftime_score,
+            es.away_halftime_score,
+            es.external_event_id,
+            es."group",
+            es.group_name,
+            es.leg,
+            es.live_scores,
+            es.round_type_id,
+            es.round,
+            es.venue_external_id,
+            es.season_id,
+            es.gmtoffset,
+            es.attendance,
+            es.ignore,
+            es.updated_at,
+            es.created_at,
+            ts1.team_id AS home_team_internal_id,
+            ts2.team_id AS away_team_internal_id,
+            cs.competition_id AS competition_internal_id,
+            vs.venue_id AS venue_internal_id,
+            s2.name AS external_type,
+            c1.hemisphere,
+            oop.priority_value AS oop
+           FROM event_source es
+             LEFT JOIN team_source_comp ts1 ON es.source_id = ts1.source_id AND es.home_team_external_id::text = ts1.external_id::text AND es.competition_external_id::text = ts1.competition_external_id::text
+             LEFT JOIN team_source_comp ts2 ON es.source_id = ts2.source_id AND es.away_team_external_id::text = ts2.external_id::text AND es.competition_external_id::text = ts2.competition_external_id::text
+             LEFT JOIN team t1_1 ON ts1.team_id = t1_1.id
+             LEFT JOIN team t2_1 ON ts2.team_id = t2_1.id
+             LEFT JOIN competition_source cs ON es.source_id = cs.source_id AND es.competition_external_id::text = cs.external_id::text
+             LEFT JOIN competition c1 ON cs.competition_id = c1.id
+             LEFT JOIN venue_source vs ON es.source_id = vs.source_id AND es.venue_external_id::text = vs.external_id::text
+             LEFT JOIN source s2 ON es.source_id = s2.id
+             LEFT JOIN source_priority oop ON s2.id = oop.source_id
+          WHERE es.event_id IS NOT NULL AND oop.table_name::text = 'event_source'::text AND es.ignore IS NOT TRUE AND oop.priority_value IS NOT NULL
+          ORDER BY oop.priority_value DESC, es.updated_at DESC
+        ), home_team_mapped AS (
+         SELECT a1.event_id,
+            a1.home_team_internal_id
+           FROM ( SELECT a.event_id,
+                    a.home_team_internal_id,
+                    row_number() OVER (PARTITION BY a.event_id ORDER BY a.event_id, a.freq DESC) AS home_ranking
+                   FROM ( SELECT e.id AS event_id,
+                            esd.home_team_internal_id,
+                            count(*) AS freq
+                           FROM event_source_detailed esd
+                             LEFT JOIN event e ON esd.event_id = e.id
+                          GROUP BY e.id, esd.home_team_internal_id
+                          ORDER BY e.id, esd.home_team_internal_id DESC) a) a1
+          WHERE a1.home_ranking = 1
+        ), away_team_mapped AS (
+         SELECT a1.event_id,
+            a1.away_team_internal_id
+           FROM ( SELECT a.event_id,
+                    a.away_team_internal_id,
+                    row_number() OVER (PARTITION BY a.event_id ORDER BY a.event_id, a.freq DESC) AS away_ranking
+                   FROM ( SELECT e.id AS event_id,
+                            esd.away_team_internal_id,
+                            count(*) AS freq
+                           FROM event_source_detailed esd
+                             LEFT JOIN event e ON esd.event_id = e.id
+                          GROUP BY e.id, esd.away_team_internal_id
+                          ORDER BY e.id, esd.away_team_internal_id DESC) a) a1
+          WHERE a1.away_ranking = 1
+        ), events_with_teams_swapped AS (
+         SELECT esd.id,
+            esd.event_id
+           FROM event_source_detailed esd
+             LEFT JOIN home_team_mapped htm ON esd.event_id = htm.event_id
+             LEFT JOIN away_team_mapped atm ON esd.event_id = atm.event_id
+          WHERE esd.home_team_internal_id = atm.away_team_internal_id OR esd.away_team_internal_id = htm.home_team_internal_id
+        ), events_corrected AS (
+         SELECT esd.id,
+            esd.name,
+            esd.source_id,
+            esd.event_id,
+                CASE
+                    WHEN (esd.id IN ( SELECT events_with_teams_swapped.id
+                       FROM events_with_teams_swapped)) THEN esd.away_team_internal_id
+                    WHEN esd.source_id = '55da127a-d8b3-4b08-866f-828d33256bef'::uuid AND esd.home_team_internal_id::text IS NULL THEN esd.home_team_external_id::uuid
+                    ELSE esd.home_team_internal_id
+                END AS home_team_internal_id,
+                CASE
+                    WHEN (esd.id IN ( SELECT events_with_teams_swapped.id
+                       FROM events_with_teams_swapped)) THEN esd.home_team_internal_id
+                    WHEN esd.source_id = '55da127a-d8b3-4b08-866f-828d33256bef'::uuid AND esd.away_team_internal_id::text IS NULL THEN esd.away_team_external_id::uuid
+                    ELSE esd.away_team_internal_id
+                END AS away_team_internal_id,
+                CASE
+                    WHEN (esd.id IN ( SELECT events_with_teams_swapped.id
+                       FROM events_with_teams_swapped)) THEN esd.away_halftime_score
+                    ELSE esd.home_halftime_score
+                END AS home_halftime_score,
+                CASE
+                    WHEN (esd.id IN ( SELECT events_with_teams_swapped.id
+                       FROM events_with_teams_swapped)) THEN esd.home_halftime_score
+                    ELSE esd.away_halftime_score
+                END AS away_halftime_score,
+                CASE
+                    WHEN (esd.id IN ( SELECT events_with_teams_swapped.id
+                       FROM events_with_teams_swapped)) THEN esd.away_score
+                    ELSE esd.home_score
+                END AS home_score,
+                CASE
+                    WHEN (esd.id IN ( SELECT events_with_teams_swapped.id
+                       FROM events_with_teams_swapped)) THEN esd.home_score
+                    ELSE esd.away_score
+                END AS away_score,
+                CASE
+                    WHEN esd.source_id = '55da127a-d8b3-4b08-866f-828d33256bef'::uuid AND esd.competition_internal_id::text IS NULL AND esd.competition_external_id::text <> 'nan'::text THEN esd.competition_external_id::text
+                    ELSE esd.competition_internal_id::text
+                END AS competition_internal_id,
+                CASE
+                    WHEN esd.source_id = '55da127a-d8b3-4b08-866f-828d33256bef'::uuid AND esd.venue_internal_id::text IS NULL THEN esd.venue_external_id::text
+                    ELSE esd.venue_internal_id::text
+                END AS venue_internal_id,
+            esd.start_time,
+            esd.end_time,
+            esd."group",
+            esd.group_name,
+            esd.leg,
+            esd.live_scores,
+            esd.round_type_id,
+            esd.round,
+            esd.season_id,
+            esd.gmtoffset,
+            esd.attendance,
+            esd.hemisphere,
+                CASE
+                    WHEN (esd.status::text = ANY (ARRAY['result'::character varying::text, 'fixture'::character varying::text])) AND esd.home_score IS NOT NULL AND esd.away_score IS NOT NULL THEN 'result'::text
+                    WHEN esd.home_score IS NULL AND esd.away_score IS NULL THEN 'fixture'::text
+                    WHEN esd.source_id = '55da127a-d8b3-4b08-866f-828d33256bef'::uuid AND esd.home_score = 0 AND esd.away_score = 0 THEN 'result'::text
+                    ELSE 'fixture'::text
+                END AS status,
+            esd.external_type,
+            esd.oop,
+            esd.updated_at
+           FROM event_source_detailed esd
+          ORDER BY esd.event_id, esd.oop DESC, esd.updated_at DESC
+        ), event_view AS (
+         SELECT events_corrected.event_id,
+            (array_agg(events_corrected.name) FILTER (WHERE events_corrected.name IS NOT NULL))[1] AS name,
+            (array_agg(events_corrected.home_team_internal_id) FILTER (WHERE events_corrected.home_team_internal_id IS NOT NULL))[1] AS home_team_internal_id,
+            (array_agg(events_corrected.away_team_internal_id) FILTER (WHERE events_corrected.away_team_internal_id IS NOT NULL))[1] AS away_team_internal_id,
+            (array_agg(events_corrected.competition_internal_id) FILTER (WHERE events_corrected.competition_internal_id IS NOT NULL))[1] AS competition_internal_id,
+            (array_agg(events_corrected.start_time) FILTER (WHERE events_corrected.start_time IS NOT NULL))[1] AS start_time,
+            (array_agg(events_corrected.status) FILTER (WHERE events_corrected.status IS NOT NULL))[1] AS status,
+            (array_agg(events_corrected.end_time) FILTER (WHERE events_corrected.end_time IS NOT NULL))[1] AS end_time,
+            (array_agg(events_corrected.home_score) FILTER (WHERE events_corrected.home_score IS NOT NULL AND (events_corrected.home_score > 0 OR events_corrected.away_score > 0)))[1] AS home_score,
+            (array_agg(events_corrected.away_score) FILTER (WHERE events_corrected.away_score IS NOT NULL AND (events_corrected.home_score > 0 OR events_corrected.away_score > 0)))[1] AS away_score,
+            (array_agg(events_corrected.home_halftime_score) FILTER (WHERE events_corrected.home_halftime_score IS NOT NULL))[1] AS home_halftime_score,
+            (array_agg(events_corrected.away_halftime_score) FILTER (WHERE events_corrected.away_halftime_score IS NOT NULL))[1] AS away_halftime_score,
+            (array_agg(events_corrected."group") FILTER (WHERE events_corrected."group" IS NOT NULL))[1] AS "group",
+            (array_agg(events_corrected.group_name) FILTER (WHERE events_corrected.group_name IS NOT NULL))[1] AS group_name,
+            (array_agg(events_corrected.leg) FILTER (WHERE events_corrected.leg IS NOT NULL))[1] AS leg,
+            (array_agg(events_corrected.live_scores) FILTER (WHERE events_corrected.live_scores IS NOT NULL))[1] AS live_scores,
+            (array_agg(events_corrected.round_type_id) FILTER (WHERE events_corrected.round_type_id IS NOT NULL))[1] AS round_type_id,
+            (array_agg(events_corrected.round) FILTER (WHERE events_corrected.round IS NOT NULL))[1] AS round,
+            (array_agg(events_corrected.venue_internal_id) FILTER (WHERE events_corrected.venue_internal_id IS NOT NULL))[1] AS venue_internal_id,
+            (array_agg(events_corrected.season_id) FILTER (WHERE events_corrected.season_id IS NOT NULL))[1] AS season_id,
+            (array_agg(events_corrected.gmtoffset) FILTER (WHERE events_corrected.gmtoffset IS NOT NULL))[1] AS gmtoffset,
+            (array_agg(events_corrected.attendance) FILTER (WHERE events_corrected.attendance IS NOT NULL))[1] AS attendance,
+            (array_agg(events_corrected.hemisphere) FILTER (WHERE events_corrected.hemisphere IS NOT NULL))[1] AS hemisphere,
+            max(events_corrected.updated_at) AS updated_at
+           FROM events_corrected
+          GROUP BY events_corrected.event_id
+        ), final_view_table AS (
+         SELECT event_view.event_id,
+            regexp_replace(event_view.name::text, '&'::text, '&'::text)::character varying AS name,
+                CASE
+                    WHEN event_view.home_team_internal_id = 'f77f26da-ef8e-4a31-99c5-12625351ae44'::uuid AND lower(event_view.hemisphere::text) = 'northern'::text THEN 'f7211586-ac92-11ea-8a71-001a7dda7115'::uuid
+                    WHEN event_view.home_team_internal_id = 'f7211586-ac92-11ea-8a71-001a7dda7115'::uuid AND lower(event_view.hemisphere::text) = 'southern'::text THEN 'f77f26da-ef8e-4a31-99c5-12625351ae44'::uuid
+                    WHEN event_view.home_team_internal_id = '46b6d5ee-4bb5-4a6a-a206-0d5e031b0558'::uuid AND lower(event_view.hemisphere::text) = 'northern'::text THEN '7702f855-d5a5-4704-8f0c-692a24b23c18'::uuid
+                    WHEN event_view.home_team_internal_id = '7702f855-d5a5-4704-8f0c-692a24b23c18'::uuid AND lower(event_view.hemisphere::text) = 'southern'::text THEN '46b6d5ee-4bb5-4a6a-a206-0d5e031b0558'::uuid
+                    WHEN event_view.home_team_internal_id = '7702f855-d5a5-4704-8f0c-692a24b23c18'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN 'c42faf80-2249-49ce-a98b-1c217cff8416'::uuid
+                    WHEN event_view.home_team_internal_id = '13a1c9b4-8e4e-454a-b668-281bc3073189'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '4b43e2a9-47fc-411b-aaa3-9e19ce539e63'::uuid
+                    WHEN event_view.home_team_internal_id = 'cc5c4527-2c82-44da-8c64-40ebad3f2a3a'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '501fb3ac-b796-483b-b638-82fba20777a9'::uuid
+                    WHEN event_view.home_team_internal_id = '79b3c061-f82c-44bf-8e98-c309ed39487b'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '95f7cfbb-7e45-4985-b582-ae38c7126fca'::uuid
+                    WHEN event_view.home_team_internal_id = '5be3cd2b-c997-464d-bf45-15e7d5c368b7'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '47e268d2-e48a-4266-9e15-48c9c8046d09'::uuid
+                    WHEN event_view.home_team_internal_id = '9accfb05-006c-4dc1-853d-01a2a59b3262'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN 'af0f7b4c-6d62-4789-8916-aabf44095209'::uuid
+                    WHEN event_view.home_team_internal_id = '4db4194c-3e6c-41ae-9af8-fdbc0783cf54'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '007217ee-ef2d-40f9-bcad-a7002eafd912'::uuid
+                    WHEN event_view.home_team_internal_id = '441de90f-8623-4ae8-a1b8-0a5a52ed90c3'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN 'a09c9a09-7529-4e3c-afa9-a300a8dd4a67'::uuid
+                    WHEN event_view.home_team_internal_id = '5be3cd2b-c997-464d-bf45-15e7d5c368b7'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '47e268d2-e48a-4266-9e15-48c9c8046d09'::uuid
+                    WHEN event_view.home_team_internal_id = '5be3cd2b-c997-464d-bf45-15e7d5c368b7'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '47e268d2-e48a-4266-9e15-48c9c8046d09'::uuid
+                    WHEN event_view.home_team_internal_id = 'f0e39423-442b-49d4-81e9-4e3f365f9550'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['0524a4e0-efeb-4780-93b9-be98b2f3fbe2'::text, '95ab3fbf-4670-4405-8025-6c65efce65d7'::text, '69397a9a-19ef-4d82-bc86-370baf9c53c3'::text])) THEN '331ad8fe-635f-4a54-8bf8-309c0122d2fa'::uuid
+                    WHEN event_view.home_team_internal_id = 'f38e4f20-45fe-4e52-875a-0a3858ab2292'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['0524a4e0-efeb-4780-93b9-be98b2f3fbe2'::text, '95ab3fbf-4670-4405-8025-6c65efce65d7'::text, '69397a9a-19ef-4d82-bc86-370baf9c53c3'::text])) THEN '4b4ff4a7-6db5-4a3c-8efb-88ecc98d9144'::uuid
+                    WHEN event_view.home_team_internal_id = 'ed36539d-47aa-4415-a45a-cf37410ae2d0'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['0524a4e0-efeb-4780-93b9-be98b2f3fbe2'::text, '95ab3fbf-4670-4405-8025-6c65efce65d7'::text, '69397a9a-19ef-4d82-bc86-370baf9c53c3'::text])) THEN '4ea56d78-afca-456d-9995-ff43c75fe7fa'::uuid
+                    WHEN event_view.home_team_internal_id = 'fa1ddd5f-f83d-4457-92c2-cabc2116237d'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['0524a4e0-efeb-4780-93b9-be98b2f3fbe2'::text, '95ab3fbf-4670-4405-8025-6c65efce65d7'::text, '69397a9a-19ef-4d82-bc86-370baf9c53c3'::text])) THEN '2327b0bb-ab78-4f03-8c31-d38f7b3c47ef'::uuid
+                    WHEN event_view.home_team_internal_id = 'd47eb632-68d6-4c2f-a5ce-ae322f4c274a'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['92c3cd86-8fb6-4b0b-8044-da30f89b4c8d'::text, 'f081b233-551c-4948-8840-29251e1952d3'::text, 'ab1869a8-65c7-4d21-ad3c-c997a8590e1b'::text])) THEN '7702f855-d5a5-4704-8f0c-692a24b23c18'::uuid
+                    ELSE event_view.home_team_internal_id
+                END AS home_team_internal_id,
+                CASE
+                    WHEN event_view.away_team_internal_id = 'f77f26da-ef8e-4a31-99c5-12625351ae44'::uuid AND lower(event_view.hemisphere::text) = 'northern'::text THEN 'f7211586-ac92-11ea-8a71-001a7dda7115'::uuid
+                    WHEN event_view.away_team_internal_id = 'f7211586-ac92-11ea-8a71-001a7dda7115'::uuid AND lower(event_view.hemisphere::text) = 'southern'::text THEN 'f77f26da-ef8e-4a31-99c5-12625351ae44'::uuid
+                    WHEN event_view.away_team_internal_id = '46b6d5ee-4bb5-4a6a-a206-0d5e031b0558'::uuid AND lower(event_view.hemisphere::text) = 'northern'::text THEN '7702f855-d5a5-4704-8f0c-692a24b23c18'::uuid
+                    WHEN event_view.away_team_internal_id = '7702f855-d5a5-4704-8f0c-692a24b23c18'::uuid AND lower(event_view.hemisphere::text) = 'southern'::text THEN '46b6d5ee-4bb5-4a6a-a206-0d5e031b0558'::uuid
+                    WHEN event_view.away_team_internal_id = '7702f855-d5a5-4704-8f0c-692a24b23c18'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN 'c42faf80-2249-49ce-a98b-1c217cff8416'::uuid
+                    WHEN event_view.away_team_internal_id = '13a1c9b4-8e4e-454a-b668-281bc3073189'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '4b43e2a9-47fc-411b-aaa3-9e19ce539e63'::uuid
+                    WHEN event_view.away_team_internal_id = 'cc5c4527-2c82-44da-8c64-40ebad3f2a3a'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '501fb3ac-b796-483b-b638-82fba20777a9'::uuid
+                    WHEN event_view.away_team_internal_id = '79b3c061-f82c-44bf-8e98-c309ed39487b'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '95f7cfbb-7e45-4985-b582-ae38c7126fca'::uuid
+                    WHEN event_view.away_team_internal_id = '5be3cd2b-c997-464d-bf45-15e7d5c368b7'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '47e268d2-e48a-4266-9e15-48c9c8046d09'::uuid
+                    WHEN event_view.away_team_internal_id = '9accfb05-006c-4dc1-853d-01a2a59b3262'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN 'af0f7b4c-6d62-4789-8916-aabf44095209'::uuid
+                    WHEN event_view.away_team_internal_id = '4db4194c-3e6c-41ae-9af8-fdbc0783cf54'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '007217ee-ef2d-40f9-bcad-a7002eafd912'::uuid
+                    WHEN event_view.away_team_internal_id = '441de90f-8623-4ae8-a1b8-0a5a52ed90c3'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN 'a09c9a09-7529-4e3c-afa9-a300a8dd4a67'::uuid
+                    WHEN event_view.away_team_internal_id = '5be3cd2b-c997-464d-bf45-15e7d5c368b7'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '47e268d2-e48a-4266-9e15-48c9c8046d09'::uuid
+                    WHEN event_view.away_team_internal_id = '5be3cd2b-c997-464d-bf45-15e7d5c368b7'::uuid AND event_view.competition_internal_id = '66391758-050d-4f83-85c6-4ee941e496df'::text THEN '47e268d2-e48a-4266-9e15-48c9c8046d09'::uuid
+                    WHEN event_view.away_team_internal_id = 'f0e39423-442b-49d4-81e9-4e3f365f9550'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['0524a4e0-efeb-4780-93b9-be98b2f3fbe2'::text, '95ab3fbf-4670-4405-8025-6c65efce65d7'::text, '69397a9a-19ef-4d82-bc86-370baf9c53c3'::text])) THEN '331ad8fe-635f-4a54-8bf8-309c0122d2fa'::uuid
+                    WHEN event_view.away_team_internal_id = 'f38e4f20-45fe-4e52-875a-0a3858ab2292'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['0524a4e0-efeb-4780-93b9-be98b2f3fbe2'::text, '95ab3fbf-4670-4405-8025-6c65efce65d7'::text, '69397a9a-19ef-4d82-bc86-370baf9c53c3'::text])) THEN '4b4ff4a7-6db5-4a3c-8efb-88ecc98d9144'::uuid
+                    WHEN event_view.away_team_internal_id = 'ed36539d-47aa-4415-a45a-cf37410ae2d0'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['0524a4e0-efeb-4780-93b9-be98b2f3fbe2'::text, '95ab3fbf-4670-4405-8025-6c65efce65d7'::text, '69397a9a-19ef-4d82-bc86-370baf9c53c3'::text])) THEN '4ea56d78-afca-456d-9995-ff43c75fe7fa'::uuid
+                    WHEN event_view.away_team_internal_id = 'fa1ddd5f-f83d-4457-92c2-cabc2116237d'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['0524a4e0-efeb-4780-93b9-be98b2f3fbe2'::text, '95ab3fbf-4670-4405-8025-6c65efce65d7'::text, '69397a9a-19ef-4d82-bc86-370baf9c53c3'::text])) THEN '2327b0bb-ab78-4f03-8c31-d38f7b3c47ef'::uuid
+                    WHEN event_view.away_team_internal_id = 'd47eb632-68d6-4c2f-a5ce-ae322f4c274a'::uuid AND (event_view.competition_internal_id = ANY (ARRAY['92c3cd86-8fb6-4b0b-8044-da30f89b4c8d'::text, 'f081b233-551c-4948-8840-29251e1952d3'::text, 'ab1869a8-65c7-4d21-ad3c-c997a8590e1b'::text])) THEN '7702f855-d5a5-4704-8f0c-692a24b23c18'::uuid
+                    ELSE event_view.away_team_internal_id
+                END AS away_team_internal_id,
+            event_view.competition_internal_id,
+            event_view.start_time,
+            event_view.end_time,
+            event_view.status,
+            event_view.home_score,
+            event_view.away_score,
+                CASE
+                    WHEN event_view.home_halftime_score > event_view.home_score THEN NULL::integer
+                    ELSE event_view.home_halftime_score
+                END AS home_halftime_score,
+                CASE
+                    WHEN event_view.away_halftime_score > event_view.away_score THEN NULL::integer
+                    ELSE event_view.away_halftime_score
+                END AS away_halftime_score,
+            event_view."group",
+            event_view.group_name,
+            event_view.leg,
+            event_view.live_scores,
+            event_view.round_type_id,
+            event_view.round,
+            event_view.venue_internal_id,
+            event_view.season_id,
+            event_view.gmtoffset,
+            event_view.attendance,
+            event_view.updated_at
+           FROM event_view
+        ), curr_view_table AS (
+         SELECT fvt.event_id,
+            ((t1.name::text || ' vs '::text) || t2.name::text)::character varying AS name,
+            fvt.home_team_internal_id,
+            count(fvt.home_team_internal_id) OVER (PARTITION BY fvt.home_team_internal_id ORDER BY fvt.start_time) AS home_team_home_fixture_number,
+            t1.national_team_id AS home_team_national_team_id,
+            t2.national_team_id AS away_team_national_team_id,
+            t1.type AS home_team_type,
+            t2.type AS away_team_type,
+            fvt.away_team_internal_id,
+            count(fvt.away_team_internal_id) OVER (PARTITION BY fvt.away_team_internal_id ORDER BY fvt.start_time) AS away_team_home_fixture_number,
+            fvt.competition_internal_id,
+            fvt.start_time,
+            fvt.end_time,
+            fvt.status,
+            fvt.home_score,
+            fvt.away_score,
+            fvt.home_halftime_score,
+            fvt.away_halftime_score,
+            fvt."group",
+            fvt.group_name,
+            fvt.leg,
+            fvt.live_scores,
+            fvt.round_type_id,
+            fvt.round,
+            fvt.venue_internal_id,
+                CASE
+                    WHEN fvt.venue_internal_id IS NULL THEN NULL::bigint
+                    ELSE count(fvt.event_id) OVER (PARTITION BY fvt.home_team_internal_id, fvt.venue_internal_id ORDER BY fvt.start_time)
+                END AS home_team_prev_fix_at_venue,
+            v.national_team AS venue_national_team,
+            fvt.season_id,
+            fvt.gmtoffset,
+            fvt.attendance,
+            fvt.updated_at
+           FROM final_view_table fvt
+             LEFT JOIN team t1 ON fvt.home_team_internal_id = t1.id
+             LEFT JOIN team t2 ON fvt.away_team_internal_id = t2.id
+             LEFT JOIN venue v ON fvt.venue_internal_id = v.id::character varying::text
+        ), venue_team AS (
+         SELECT curr_view_table.venue_internal_id,
+            curr_view_table.home_team_internal_id,
+            count(curr_view_table.event_id) AS home_total_no_events_at_venue
+           FROM curr_view_table
+          WHERE curr_view_table.venue_internal_id IS NOT NULL
+          GROUP BY curr_view_table.venue_internal_id, curr_view_table.home_team_internal_id
+        ), home_venue_rollup AS (
+         SELECT cvt1.home_team_internal_id,
+            cvt1.venue_internal_id,
+            cvt1.home_team_home_fixture_number,
+            count(cvt2.home_team_home_fixture_number) AS home_previous_n_games_with_venue
+           FROM curr_view_table cvt1
+             LEFT JOIN curr_view_table cvt2 ON cvt1.home_team_internal_id = cvt2.home_team_internal_id AND cvt1.venue_internal_id = cvt2.venue_internal_id
+          WHERE cvt1.venue_internal_id IS NOT NULL AND cvt1.home_team_home_fixture_number >= cvt2.home_team_home_fixture_number AND cvt1.home_team_home_fixture_number < (cvt2.home_team_home_fixture_number + 20)
+          GROUP BY cvt1.home_team_internal_id, cvt1.venue_internal_id, cvt1.home_team_home_fixture_number
+        ), home_rollup AS (
+         SELECT cvt1.home_team_internal_id,
+            cvt1.home_team_home_fixture_number,
+            count(cvt2.home_team_home_fixture_number) AS num_fix_last_20_games
+           FROM curr_view_table cvt1
+             LEFT JOIN curr_view_table cvt2 ON cvt1.home_team_internal_id = cvt2.home_team_internal_id
+          WHERE cvt1.venue_internal_id IS NOT NULL AND cvt1.home_team_home_fixture_number >= cvt2.home_team_home_fixture_number AND cvt1.home_team_home_fixture_number < (cvt2.home_team_home_fixture_number + 20)
+          GROUP BY cvt1.home_team_internal_id, cvt1.home_team_home_fixture_number
+        ), venue_calculations AS (
+         SELECT cvt.event_id,
+            cvt.name,
+            cvt.home_team_internal_id,
+            cvt.home_team_home_fixture_number,
+            cvt.home_team_national_team_id,
+            cvt.away_team_national_team_id,
+            cvt.home_team_type,
+            cvt.away_team_type,
+            cvt.away_team_internal_id,
+            cvt.away_team_home_fixture_number,
+            cvt.competition_internal_id,
+            cvt.start_time,
+            cvt.end_time,
+            cvt.status,
+            cvt.home_score,
+            cvt.away_score,
+            cvt.home_halftime_score,
+            cvt.away_halftime_score,
+            cvt."group",
+            cvt.group_name,
+            cvt.leg,
+            cvt.live_scores,
+            cvt.round_type_id,
+            cvt.round,
+            cvt.venue_internal_id,
+            cvt.home_team_prev_fix_at_venue,
+            cvt.venue_national_team,
+            cvt.season_id,
+            cvt.gmtoffset,
+            cvt.attendance,
+            cvt.updated_at,
+            hvr.home_previous_n_games_with_venue,
+            hr.num_fix_last_20_games,
+                CASE
+                    WHEN cvt.venue_internal_id IS NULL THEN NULL::numeric
+                    ELSE hvr.home_previous_n_games_with_venue::numeric / hr.num_fix_last_20_games::numeric
+                END AS venue_perc,
+            true AS home_venue
+           FROM curr_view_table cvt
+             LEFT JOIN home_venue_rollup hvr ON cvt.home_team_internal_id = hvr.home_team_internal_id AND cvt.venue_internal_id = hvr.venue_internal_id AND cvt.home_team_home_fixture_number = hvr.home_team_home_fixture_number
+             LEFT JOIN home_rollup hr ON cvt.home_team_internal_id = hr.home_team_internal_id AND cvt.home_team_home_fixture_number = hr.home_team_home_fixture_number
+        ), home_team_calc AS (
+         SELECT vc.event_id,
+            vc.name,
+            vc.home_team_internal_id,
+            vc.home_team_home_fixture_number,
+            vc.home_team_national_team_id,
+            vc.away_team_national_team_id,
+            vc.home_team_type,
+            vc.away_team_type,
+            vc.away_team_internal_id,
+            vc.away_team_home_fixture_number,
+            vc.competition_internal_id,
+            vc.start_time,
+            vc.end_time,
+            vc.status,
+            vc.home_score,
+            vc.away_score,
+            vc.home_halftime_score,
+            vc.away_halftime_score,
+            vc."group",
+            vc.group_name,
+            vc.leg,
+            vc.live_scores,
+            vc.round_type_id,
+            vc.round,
+            vc.venue_internal_id,
+            vc.venue_national_team,
+            vc.season_id,
+            vc.gmtoffset,
+            vc.attendance,
+            vc.updated_at,
+            vc.home_previous_n_games_with_venue,
+            vc.num_fix_last_20_games,
+            vc.venue_perc,
+                CASE
+                    WHEN vc.home_team_type::text = 'international'::text AND vc.home_team_internal_id::character varying::text = vc.venue_national_team::character varying::text THEN true
+                    WHEN vc.home_team_type::text = 'international'::text AND vc.home_team_internal_id::character varying::text <> vc.venue_national_team::character varying::text AND vc.venue_national_team IS NOT NULL THEN false
+                    WHEN vc.home_team_type::text ~~ '%international%'::text AND vc.home_team_national_team_id::character varying::text = vc.venue_national_team::character varying::text THEN true
+                    WHEN vc.home_team_type::text ~~ '%international%'::text AND vc.home_team_national_team_id::character varying::text <> vc.venue_national_team::character varying::text AND vc.venue_national_team IS NOT NULL THEN false
+                    WHEN vc.home_team_type::text !~~ '%international%'::text AND vc.home_team_national_team_id::character varying::text = vc.venue_national_team::character varying::text AND vc.away_team_national_team_id::character varying::text <> vc.venue_national_team::character varying::text AND vc.venue_national_team IS NOT NULL THEN true
+                    WHEN vc.home_team_type::text !~~ '%international%'::text AND vc.home_team_national_team_id::character varying::text = vc.venue_national_team::character varying::text AND vc.away_team_national_team_id::character varying::text = vc.venue_national_team::character varying::text AND vc.venue_national_team IS NOT NULL AND vc.venue_perc >= 0.2 THEN true
+                    WHEN vc.home_team_type::text !~~ '%international%'::text AND vc.home_team_national_team_id::character varying::text = vc.venue_national_team::character varying::text AND vc.away_team_national_team_id::character varying::text = vc.venue_national_team::character varying::text AND vc.venue_national_team IS NOT NULL AND vc.venue_perc < 0.2 THEN false
+                    WHEN vc.home_team_type::text !~~ '%international%'::text AND vc.home_team_national_team_id::character varying::text <> vc.venue_national_team::character varying::text AND vc.venue_national_team IS NOT NULL THEN false
+                    WHEN vc.home_team_internal_id = '564ae346-5235-40b8-ab48-fc4f435601be'::uuid THEN true
+                    WHEN vc.home_team_national_team_id::character varying::text <> vc.venue_national_team::character varying::text AND vc.home_team_national_team_id IS NOT NULL AND vc.venue_national_team IS NOT NULL THEN false
+                    WHEN vc.venue_perc < 0.2 THEN false
+                    ELSE vc.home_venue
+                END AS home_venue
+           FROM venue_calculations vc
+        ), home_away_travel_advantage AS (
+         SELECT htc.event_id,
+            htc.name,
+            htc.home_team_internal_id,
+            htc.home_team_home_fixture_number,
+            htc.home_team_national_team_id,
+            htc.away_team_national_team_id,
+            htc.home_team_type,
+            htc.away_team_type,
+            htc.away_team_internal_id,
+            htc.away_team_home_fixture_number,
+            htc.competition_internal_id,
+            htc.start_time,
+            htc.end_time,
+            htc.status,
+            htc.home_score,
+            htc.away_score,
+            htc.home_halftime_score,
+            htc.away_halftime_score,
+            htc."group",
+            htc.group_name,
+            htc.leg,
+            htc.live_scores,
+            htc.round_type_id,
+            htc.round,
+            htc.venue_internal_id,
+            htc.venue_national_team,
+            htc.season_id,
+            htc.gmtoffset,
+            htc.attendance,
+            htc.updated_at,
+            htc.home_previous_n_games_with_venue,
+            htc.num_fix_last_20_games,
+            htc.venue_perc,
+            htc.home_venue,
+                CASE
+                    WHEN htc.home_team_internal_id = '564ae346-5235-40b8-ab48-fc4f435601be'::uuid AND htc.venue_national_team <> 'cd0d53f5-4a11-4ded-8594-641ef025842d'::uuid AND htc.venue_national_team IS NOT NULL THEN 1
+                    WHEN htc.home_team_type::text = 'international'::text AND htc.home_team_internal_id <> htc.venue_national_team AND htc.venue_national_team IS NOT NULL THEN 1
+                    WHEN htc.home_team_type::text = 'international'::text AND htc.home_team_internal_id = htc.venue_national_team AND htc.venue_national_team IS NOT NULL THEN 0
+                    WHEN htc.home_team_type::text = 'international'::text AND htc.home_team_internal_id = htc.venue_national_team AND htc.venue_national_team IS NULL THEN 0
+                    WHEN htc.home_team_type::text <> 'international'::text AND htc.home_team_national_team_id <> htc.venue_national_team AND htc.home_team_national_team_id IS NOT NULL AND htc.venue_national_team IS NOT NULL THEN 1
+                    ELSE 0
+                END AS home_travelled,
+                CASE
+                    WHEN htc.away_team_internal_id = '564ae346-5235-40b8-ab48-fc4f435601be'::uuid AND htc.venue_national_team <> 'cd0d53f5-4a11-4ded-8594-641ef025842d'::uuid AND htc.venue_national_team IS NOT NULL THEN 1
+                    WHEN htc.away_team_type::text = 'international'::text AND htc.away_team_internal_id <> htc.venue_national_team AND htc.venue_national_team IS NOT NULL THEN 1
+                    WHEN htc.away_team_type::text = 'international'::text AND htc.away_team_internal_id = htc.venue_national_team AND htc.venue_national_team IS NOT NULL THEN 0
+                    WHEN htc.away_team_type::text = 'international'::text AND htc.away_team_internal_id = htc.venue_national_team AND htc.venue_national_team IS NULL THEN 0
+                    WHEN htc.away_team_type::text <> 'international'::text AND htc.away_team_national_team_id <> htc.venue_national_team AND htc.away_team_national_team_id IS NOT NULL AND htc.venue_national_team IS NOT NULL THEN 1
+                    ELSE 0
+                END AS away_travelled
+           FROM home_team_calc htc
+        ), final_view AS (
+         SELECT hat.event_id,
+            hat.name,
+            hat.home_team_internal_id,
+            hat.home_team_home_fixture_number,
+            hat.home_team_national_team_id,
+            hat.away_team_national_team_id,
+            hat.home_team_type,
+            hat.away_team_type,
+            hat.away_team_internal_id,
+            hat.away_team_home_fixture_number,
+            hat.competition_internal_id,
+            hat.start_time,
+            hat.end_time,
+            hat.status,
+            hat.home_score,
+            hat.away_score,
+            hat.home_halftime_score,
+            hat.away_halftime_score,
+            hat."group",
+            hat.group_name,
+            hat.leg,
+            hat.live_scores,
+            hat.round_type_id,
+            hat.round,
+            hat.venue_internal_id,
+            hat.venue_national_team,
+            hat.season_id,
+            hat.gmtoffset,
+            hat.attendance,
+            hat.updated_at,
+            hat.home_previous_n_games_with_venue,
+            hat.num_fix_last_20_games,
+            hat.venue_perc,
+            hat.home_venue,
+            hat.home_travelled,
+            hat.away_travelled,
+                CASE
+                    WHEN hat.home_travelled = 1 AND hat.away_travelled = 0 THEN '-1'::integer
+                    WHEN hat.home_travelled = 0 AND hat.away_travelled = 0 THEN 0
+                    WHEN hat.home_travelled = 1 AND hat.away_travelled = 1 THEN 0
+                    WHEN hat.home_travelled = 0 AND hat.away_travelled = 1 THEN 1
+                    ELSE 0
+                END AS travel_advantage
+           FROM home_away_travel_advantage hat
+        )
+ SELECT final_view.event_id,
+    final_view.name,
+    final_view.home_team_internal_id,
+    final_view.away_team_internal_id,
+    final_view.competition_internal_id,
+    final_view.start_time,
+    final_view.end_time,
+    final_view.status,
+    final_view.home_score,
+    final_view.away_score,
+    final_view.home_halftime_score,
+    final_view.away_halftime_score,
+    final_view."group",
+    final_view.group_name,
+    final_view.leg,
+    final_view.live_scores,
+    final_view.round_type_id,
+    final_view.round,
+    final_view.venue_internal_id,
+    final_view.season_id,
+    final_view.gmtoffset,
+    final_view.attendance,
+    final_view.updated_at,
+    final_view.home_team_home_fixture_number,
+    final_view.home_team_national_team_id,
+    final_view.away_team_national_team_id,
+    final_view.home_team_type,
+    final_view.away_team_type,
+    final_view.away_team_home_fixture_number,
+    final_view.venue_national_team,
+    final_view.home_previous_n_games_with_venue,
+    final_view.num_fix_last_20_games,
+    final_view.venue_perc,
+    final_view.home_venue,
+    final_view.home_travelled,
+    final_view.away_travelled,
+    final_view.travel_advantage
+   FROM final_view;

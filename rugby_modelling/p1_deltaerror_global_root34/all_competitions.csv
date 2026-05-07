@@ -1,0 +1,139 @@
+id,name,updated_at,created_at,level,type,hemisphere,home_competition_group,competition_group,cross_border_comp,transfer_multiplier,key_competition_name
+0524a4e0-efeb-4780-93b9-be98b2f3fbe2,Currie Cup,20/02/2019 14:14,20/02/2019 14:14,3,Mens,southern,Currie Cup,South Africa,FALSE,1,Currie Cup
+396d8107-2dac-436e-a9f8-5883991655c0,European Rugby Challenge Cup,20/02/2019 14:14,20/02/2019 14:14,3,Mens,northern,na,Europe,TRUE,1,European Rugby Challenge Cup
+4f0ae53d-8cd4-4d93-9fbe-0ce2df4bb56b,Gallagher Premiership,20/02/2019 14:14,20/02/2019 14:14,2,Mens,northern,Gallagher Premiership,England,FALSE,1,Gallagher Premiership
+f330a8ae-38bf-4ec2-9735-6269f6b14e77,Georgia Didi 10,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Georgia Didi 10,Georgia,FALSE,1,Other Club League
+92c3cd86-8fb6-4b0b-8044-da30f89b4c8d,Heineken Champions Cup,20/02/2019 14:14,20/02/2019 14:14,2,Mens,northern,na,Europe,TRUE,1,Heineken Champions Cup
+c5ec9df5-f62f-48b9-8298-35f95fe64538,Africa Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,Africa,FALSE,1,International
+4c904cf7-06cc-470d-bdfb-3eb5ffc24a98,Americas Pacific Challenge,13/04/2020 17:50,13/04/2020 17:50,1,Mens,southern,international_mens,World,FALSE,1,International
+95ce8319-4a80-43ac-9bd0-61c887c9f4e6,Americas Rugby Challenge,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,Americas,FALSE,1,International
+915632b8-a75f-49f5-a573-f4639b5d1e61,Americas Rugby Championship,20/02/2019 14:14,20/02/2019 14:14,1,Mens,na,international_mens,Americas,FALSE,1,International
+2e03d021-a1fe-4551-bb31-1ea0cbcbb4af,Asia Games,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,Asia,FALSE,1,International
+e7d6e23d-bd03-4592-ab9e-4ae0695acd79,Asia Rugby Championship,20/02/2019 14:14,20/02/2019 14:14,1,Mens,northern,international_mens,Asia,FALSE,1,International
+2ac22fec-3cbd-4e5e-8ca7-520c785c3a36,Asian 5 Nations,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,Asia,FALSE,1,International
+1ab0a068-6688-49b6-b4c2-2289bfd83fe1,Autumn Nations Cup,12/11/2020 17:46,12/11/2020 17:46,1,Mens,northern,international_mens,Europe,FALSE,1,International
+a7ed1c2f-648a-4590-af1a-60a27be0dbb0,British & Irish Lions,20/02/2019 14:14,20/02/2019 14:14,1,Mens,southern,international_mens,World,FALSE,1,International
+41fdaa5f-df8d-4ed9-bd58-f7a8a5c323d6,Can-Am Series,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,USA,FALSE,1,International
+bf11e301-c079-46a0-a946-b976622f24ba,CAR Development Trophy,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,Africa,FALSE,1,International
+11d5508f-2fa3-4158-9550-b31a3b67c500,Caribbean Championships,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,Americas,FALSE,1,International
+20315617-793c-4316-9efa-b8f286bef772,Central American Championship,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,World,FALSE,1,International
+7df7843a-e50f-4b67-8e88-37cd274f6ac7,Churchill Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,World,FALSE,1,International
+690b93ee-ca3e-4a01-9ada-a138bdff65e0,Confederation of African Rugby Championship,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,Africa,FALSE,1,International
+6ff3f927-99e3-45f6-b6ad-ddadfa53a06c,CONSUR Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,southern,international_mens,Americas,FALSE,1,International
+fd1ebc68-1e2e-41ee-a5df-fafc96ebde7e,Elgon Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,southern,international_mens,Africa,FALSE,1,International
+36b1a8f4-ebb3-4bdf-a06a-0a026eb10bc5,Hong Kong Cup of Nations,20/02/2019 14:14,20/02/2019 14:14,1,Mens,northern,international_mens,World,FALSE,1,International
+1e15147e-f687-4bb6-a44f-8ab1554b59fc,Intercontinental Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,Europe,FALSE,1,International
+183ec923-6902-4c1c-9035-506588249902,International,20/02/2019 14:14,20/02/2019 14:14,1,Mens,na,international_mens,World,FALSE,1,International
+5c4516c8-ebc6-473a-a12c-025b7d388b32,Mekong Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,Asia,FALSE,1,International
+7b81ef58-b89b-4b2e-9ce8-0e2e4f09a4dd,Nations Cup,20/02/2019 14:14,20/02/2019 14:14,1,Mens,northern,international_mens,World,FALSE,1,International
+133c9d8e-8c84-478b-8dd7-21de2413fbd7,North African Tri Nations,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,Africa,FALSE,1,International
+f69a1cbc-42bf-44ca-a410-63190ca4652e,Oceania Cup,13/04/2020 17:50,13/04/2020 17:50,1,Mens,southern,international_mens,Oceania,FALSE,1,International
+15b81e55-97b6-409f-9af3-e85efbaaa781,Oceania Rugby Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,southern,international_mens,Oceania,FALSE,1,International
+1e83a299-ec76-487e-8680-090f9d5a47b3,Pacific Challenge,13/04/2020 17:50,13/04/2020 17:50,1,Mens,southern,international_mens,World,FALSE,1,International
+c2f15e2a-41fa-40b4-8779-8156a2cc74e2,Pacific Nations Cup,20/02/2019 14:14,20/02/2019 14:14,1,Mens,southern,international_mens,World,FALSE,1,International
+f3114b69-2cc7-4749-ab1d-d1a37e221469,Rugby Africa Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,Africa,FALSE,1,International
+dce1cf60-fdce-45f9-83fa-b9708818a623,Rugby Americas North Championship,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,Americas,FALSE,1,International
+46217463-e5dd-4d3b-8b0d-1efe30308267,Rugby Europe Championship,01/05/2019 23:15,01/05/2019 23:15,1,Mens,northern,international_mens,Europe,FALSE,1,International
+5dab0ba3-08df-49c0-a8b3-34219efb3a6d,Rugby Europe Nations Cup,13/04/2020 17:50,13/04/2020 17:50,1,Mens,northern,international_mens,Europe,FALSE,1,International
+4e28d4f0-5f4d-4783-b7fd-c47e07374471,Rugby Europe Other,05/05/2020 15:00,05/05/2020 15:00,1,Mens,northern,international_mens,Europe,FALSE,1,International
+bb9dda52-4dbc-4ed3-a072-55ef9d70359b,Rugby World Cup,20/02/2019 14:14,20/02/2019 14:14,1,Mens,na,international_mens,World,FALSE,1,International
+d811f6c8-af2b-4373-b641-8e6f725e9b72,Rugby World Cup Qualifying,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,World,FALSE,1,International
+146ab78d-3992-4bd9-9394-116d337503bd,Serendib International Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,World,FALSE,1,International
+9597f979-d95b-48ca-8fd3-401357e98e1c,Six Nations,20/02/2019 14:14,20/02/2019 14:14,1,Mens,northern,international_mens,Europe,FALSE,1,International
+e5132fce-9605-4ab5-9083-c21a10e8afff,South American Championship,27/04/2020 12:29,27/04/2020 12:29,1,Mens,southern,international_mens,Americas,FALSE,1,International
+a99d69ea-ff62-436a-a800-0c2a863f02ab,Sudamerica Rugby Six Nations,27/04/2020 12:29,27/04/2020 12:29,1,Mens,southern,international_mens,Americas,FALSE,1,International
+027cbe0f-d8ee-40f7-a033-0bdab594dd4c,Sudamericano 4 Naciones,28/08/2021 13:21,28/08/2021 13:21,1,Mens,southern,international_mens,Americas,FALSE,1,International
+2221d16f-43ec-46b7-bc76-8f67cfd7dd33,Superpowers Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,World,FALSE,1,International
+c2986dbb-c4fe-4e33-9f2e-70c668f21729,Tbilisi Cup,20/02/2019 14:14,20/02/2019 14:14,1,Mens,northern,international_mens,World,FALSE,1,International
+7cbf859b-970e-4a6e-9960-78d1995aced9,The Rugby Championship,20/02/2019 14:14,20/02/2019 14:14,1,Mens,southern,international_mens,World,FALSE,1,International
+b0311754-2836-4c77-bd7d-32bbc9dd330e,Victoria Cup,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,Africa,FALSE,1,International
+7d02a6c5-d82f-462a-99e2-ae0e3a351f55,Viking Tri Nations,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_mens,Europe,FALSE,1,International
+70ec044c-668c-490a-9361-61b7c4e41709,West Africa Series,27/04/2020 12:29,27/04/2020 12:29,1,Mens,na,international_mens,Africa,FALSE,1,International
+fb2ac35b-5cdd-41f4-87bc-20dc944808b4,World Rugby Under 19 Championship,27/04/2020 12:29,27/04/2020 12:29,5,U19s,na,international_u19s,World,FALSE,1,Interational Age Grade
+85deb35e-7242-4a33-86df-3ea8aaa26a34,Oceania Rugby U20 Championship,20/02/2019 14:14,20/02/2019 14:14,4,U20s,southern,international_u20s,Oceania,FALSE,1,Interational Age Grade
+805805d1-30fb-45bf-8b24-66e7bdaf95e5,Oceania Rugby U20 Trophy,05/05/2020 15:00,05/05/2020 15:00,4,U20s,southern,international_u20s,Oceania,FALSE,1,Interational Age Grade
+b98d4491-1b09-4a28-b930-bad0b2e6fbb3,U20 Americas Rugby Championship,06/08/2020 14:06,06/08/2020 14:06,4,U20s,na,international_u20s,Americas,FALSE,1,Interational Age Grade
+df59b3a4-1563-4dbf-94d3-4ab762f29fcc,U20 Six Nations,20/02/2019 14:14,20/02/2019 14:14,4,U20s,northern,international_u20s,Europe,FALSE,1,Interational Age Grade
+32026966-5676-487b-b74f-dc3c4f4fe756,U20s International,18/05/2020 15:53,18/05/2020 15:53,4,U20s,na,international_u20s,World,FALSE,1,Interational Age Grade
+6406c1d2-c643-4daf-9427-7e8738dd6f73,World Rugby Under 20 Championship,20/02/2019 14:14,20/02/2019 14:14,4,U20s,na,international_u20s,World,FALSE,1,Interational Age Grade
+b3045d16-5434-4fe2-a72c-263df273e507,World Rugby Under 20 Trophy,05/05/2020 15:00,05/05/2020 15:00,4,U20s,na,international_u20s,World,FALSE,1,Interational Age Grade
+a1e3df01-e392-4106-8195-b2df324f16a9,World Rugby Under 21 Championship,05/05/2020 15:00,05/05/2020 15:00,3,U21s,na,international_u21s,World,FALSE,1,Interational Age Grade
+d221ae1b-d25d-4747-a4eb-976c62016dee,Asia Pacific Women's Championship,27/04/2020 12:29,27/04/2020 12:29,1,Womens,northern,international_womens,Asia,FALSE,1,International Womens
+e4399091-b61c-455f-8ff3-00779d2c1222,Oceania Rugby Women's Championship,27/04/2020 12:29,27/04/2020 12:29,1,Womens,southern,international_womens,Oceania,FALSE,1,International Womens
+fb2339e7-0cba-44b4-90c5-3a5c1c33fb1d,Rugby Africa Women's Cup,27/04/2020 12:29,27/04/2020 12:29,1,Womens,na,international_womens,Africa,FALSE,1,International Womens
+01c377c1-a5fa-45fb-b5a5-32cc4fd921cb,Rugby Europe Women's Championship,27/04/2020 12:29,27/04/2020 12:29,1,Mens,northern,international_womens,Europe,FALSE,1,International Womens
+a0c18708-9710-40d9-8e34-457088f17534,Women's Asia Rugby Championship,27/04/2020 12:29,27/04/2020 12:29,1,Womens,northern,international_womens,Asia,FALSE,1,International Womens
+807fc364-49d2-410a-b721-9ddbd64f2b3f,Women's Elgon Cup,27/04/2020 12:29,27/04/2020 12:29,1,Womens,na,international_womens,Africa,FALSE,1,International Womens
+07fdf2bf-982c-492f-9672-0300b056d704,Women's International,27/04/2020 12:29,27/04/2020 12:29,1,Womens,na,international_womens,World,FALSE,1,International Womens
+d039c742-eac1-4085-8c5e-c9997011cf70,Women's Nations Cup,27/04/2020 12:29,27/04/2020 12:29,1,Womens,northern,international_womens,World,FALSE,1,International Womens
+4f7fe139-2628-45ec-b99f-bac565ace0d0,Women's Rugby Americas North Championship,27/04/2020 12:29,27/04/2020 12:29,1,Womens,northern,international_womens,Americas,FALSE,1,International Womens
+2955a1be-c35a-482c-b64d-dea602010223,Women's Rugby Super Series,27/04/2020 12:29,27/04/2020 12:29,1,Womens,northern,international_womens,World,FALSE,1,International Womens
+64dbec2c-a624-4c9c-93e3-684a5d7bba4b,Women's Rugby World Cup,20/02/2019 14:14,20/02/2019 14:14,1,Womens,na,international_womens,World,FALSE,1,International Womens
+26e02bb4-89c9-47f9-bfc8-0368b31a62e9,Women's Rugby World Cup Qualifying,27/04/2020 12:29,27/04/2020 12:29,1,Womens,na,international_womens,World,FALSE,1,International Womens
+162f34a0-6db2-4aad-9148-23b3c09e2b36,Women's Six Nations,20/02/2019 14:14,20/02/2019 14:14,1,Womens,northern,international_womens,Europe,FALSE,1,International Womens
+995c3692-b080-11ea-94fa-001a7dda7115,Women's Tour Match,06/08/2020 14:33,06/08/2020 14:33,2,Womens,na,international_womens,World,FALSE,1,International Womens
+3a4b25cf-630b-47f8-84e8-5db48f2232e3,World Rugby Pacific Four Series,18/10/2024 00:10,18/10/2024 00:09,1,Womens,northern,international_womens,Oceania,FALSE,1,International Womens
+7e901bf2-005f-461b-8105-acabc014ff2c,Japan Top League,20/02/2019 14:14,20/02/2019 14:14,2,Mens,northern,Japan Top League,Japan,FALSE,1,Japan Top League
+9dd8fc9f-e353-416a-98ca-d63f2b5ba0b9,Japan Top League Cup,28/06/2019 19:18,28/06/2019 19:18,2,Mens,northern,na,Japan,FALSE,1,Japan Top League
+35f5e778-1144-44fa-a70f-03743c031bee,Mitre 10 Cup,20/02/2019 14:14,20/02/2019 14:14,3,Mens,southern,Mitre 10 Cup,New Zealand,FALSE,1,Mitre 10 Cup
+c9c8bad7-245f-4ac8-8c66-8da63ab69bce,Canada CRC,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Canada CRC,Canada,FALSE,1,Other
+283d2a95-fa56-4316-aa1e-15a087349166,Currie Cup U21s,08/06/2021 23:13,08/06/2021 23:13,5,U21s,southern,Currie Cup U21s,South Africa,FALSE,1,Other
+4f99e929-7f27-449a-94d5-d82960254eec,Access Match,04/06/2019 12:19,04/06/2019 12:19,2,Mens,na,na,World,FALSE,1,Other
+58b1c670-f16c-4814-87e5-ce4153b10046,Celtic Cup,13/04/2020 17:50,13/04/2020 17:50,2,Mens,northern,na,Europe,FALSE,1,Other
+ddefeea0-f8bc-4295-93ee-e1113b694bee,Tour Match,24/07/2019 10:25,24/07/2019 10:25,2,Mens,na,na,World,FALSE,1,Other
+cf86bf64-559f-46c2-b90d-8c921eff1f27,Premiership Cup,14/03/2019 11:14,14/03/2019 11:14,2.5,Mens,northern,na,England,FALSE,1,Other
+fe676492-b162-11ea-ae03-001a7dda7115,Premiership Rugby Shield,06/08/2020 14:33,06/08/2020 14:33,2.5,Mens,northern,na,England,FALSE,1,Other
+ab1869a8-65c7-4d21-ad3c-c997a8590e1b,Anglo Welsh Cup,20/02/2019 14:14,20/02/2019 14:14,3,Mens,northern,na,UK,TRUE,1,Other
+66391758-050d-4f83-85c6-4ee941e496df,British & Irish Cup,20/02/2019 14:14,20/02/2019 14:14,3,Mens,northern,na,UK,FALSE,1,Other
+0ad7b587-5c9c-4367-8fbe-38dae8ca4bcd,Club Friendly,13/04/2020 17:50,13/04/2020 17:50,3,Mens,na,na,World,FALSE,1,Other
+2c01e092-06c7-4e56-ae33-9b6934014403,English Championship Cup,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,na,England,FALSE,1,Other
+c1bb604c-9350-40dd-aa14-4f9e92345a9d,France Rugby Cup,05/05/2020 15:00,05/05/2020 15:00,3,Mens,northern,na,France,FALSE,1,Other
+5f70d297-7ecb-4cd1-9bea-73571dbcabaf,Trailfinders Challenge Cup,30/03/2021 12:37,30/03/2021 12:37,3,Mens,northern,na,England,FALSE,1,Other
+72aceeca-2574-4d91-b690-243afb16161d,Wales Challenge Cup,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,na,Wales,FALSE,1,Other
+8fae9a07-e409-47a2-b980-9eb4e2835259,Continental Shield,13/04/2020 17:50,13/04/2020 17:50,4,Mens,northern,na,Europe,FALSE,1,Other
+42b4493b-abf5-440b-8c1e-32d93ccb548b,Varsity Cup,13/04/2020 17:50,13/04/2020 17:50,4,Mens,northern,na,England,FALSE,1,Other
+00000000-0000-0000-0000-000000000000,,31/08/2019 15:20,31/08/2019 15:20,na,na,na,na,,FALSE,1,Other
+0494931c-b163-11ea-8832-001a7dda7115,Varsity Cup South Africa,06/08/2020 14:33,06/08/2020 14:33,5,Mens,southern,Varsity Cup South Africa,South Africa,FALSE,1,Other
+61df7e56-1300-464e-84f1-54663d44f004,Super 20s,20/02/2019 14:14,20/02/2019 14:14,4,U20s,southern,Super 20s,Australia,FALSE,1,Other Age Grade
+ae3d6158-8a63-4065-8b21-0a1fbc283e18,All Ireland League,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,All Ireland League,Ireland,FALSE,1,Other Club League
+f4b46636-b162-11ea-af86-001a7dda7115,All Ireland League Div 1B,06/08/2020 14:33,06/08/2020 14:33,4,Mens,northern,All Ireland League Div 1B,Ireland,FALSE,1,Other Club League
+ae5fa888-62ec-4c1d-9c09-8858de559cdd,Argentinian National de Clubes,20/02/2019 14:14,20/02/2019 14:14,3,Mens,southern,Argentinian National de Clubes,South America,FALSE,1,Other Club League
+52e02eb4-9fee-4fac-9cc9-8a093bfb2e96,Austria Premiership,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Austria Premiership,Austria,FALSE,1,Other Club League
+f846c5fd-4b25-43dd-98f0-59975f148b17,Czech Rep Liga,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Czech Rep Liga,Czech Republic,FALSE,1,Other Club League
+f58adc7b-8883-4ad7-a3ea-7e4b68cd3bc3,England RFU Championship,20/02/2019 14:14,20/02/2019 14:14,3,Mens,northern,England RFU Championship,England,FALSE,1,Other Club League
+34832c47-d30e-40ca-b5c6-4065b8b01715,German Bundesliga,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,German Bundesliga,Germany,FALSE,1,Other Club League
+7df6de6a-e1a0-4b11-bffd-262c84b74789,Heartland Championship,20/02/2019 14:14,20/02/2019 14:14,4,Mens,southern,Heartland Championship,New Zealand,FALSE,1,Other Club League
+d4f47c1f-2257-4dbc-8ff6-68666628f456,Italian National Championship,20/02/2019 14:14,20/02/2019 14:14,3,Mens,northern,Italian National Championship,Italy,FALSE,1,Other Club League
+5df8ce73-4c12-4e51-a445-3c4ef356f2b4,Italy Coppa Italia,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Italy Coppa Italia,Italy,FALSE,1,Other Club League
+d6a03e8d-13c6-4900-a7f7-becfd5eca028,Japan Rugby League One - Division 2,05/07/2024 19:05,05/07/2024 19:05,5,Mens,northern,Japan Rugby League One - Division 2,Japan,FALSE,1,Other Club League
+c5b3d599-7e7f-4ab9-a321-f926dbad69d0,Japan Rugby League One - Division 3,05/07/2024 19:05,05/07/2024 19:05,6,Mens,northern,Japan Rugby League One - Division 3,Japan,FALSE,1,Other Club League
+d16a9733-9abe-4d2f-8c6b-4368edc8195a,Japan Top Challenge League,21/06/2022 14:19,21/06/2022 14:19,3,Mens,northern,Japan Top Challenge League,Japan,FALSE,1,Other Club League
+ea30dbae-d13b-4c8d-9b21-0b2681201555,Major League Rugby,04/09/2019 12:03,04/09/2019 12:03,2,Mens,northern,Major League Rugby,USA,FALSE,1,Other Club League
+83efb969-2631-466f-96d6-c5caa495b8bb,Guinness Pro14 Rainbow Cup,24/04/2021 12:27,24/04/2021 12:27,2,Mens,northern,na,World,FALSE,1,Other Club League
+bf11fd9e-d864-43b4-9ffe-01d1cc57fd00,Czech CSRU Cup,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,na,Czech Republic,FALSE,1,Other Club League
+4fad4415-8544-41dc-96e8-a069fd105672,Europe Super Cup,23/11/2021 14:18,23/11/2021 14:18,3,Mens,northern,na,Europe,FALSE,1,Other Club League
+1885fb8a-c0f2-4b19-aaaa-111e4a40567e,National League One,20/02/2019 14:14,20/02/2019 14:14,4,Mens,northern,National League One,England,FALSE,1,Other Club League
+518f3a42-b7d3-4640-a5c8-e0225fd88093,National Rugby Championship,20/02/2019 14:14,20/02/2019 14:14,3,Mens,southern,National Rugby Championship,Australia,FALSE,1,Other Club League
+11552296-5f73-427f-9308-6e0013a3ff8c,Netherlands Ereklasse,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Netherlands Ereklasse,Netherlands,FALSE,1,Other Club League
+1efb8135-ac34-4ded-a96f-c078df4dc665,Poland Ekstraliga,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Poland Ekstraliga,Poland,FALSE,1,Other Club League
+cead6c33-bc0d-4358-86cc-71db61af7d9c,Portugal CN Honra,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Portugal CN Honra,Portugal,FALSE,1,Other Club League
+e9913e66-2b89-489b-9978-f72e53e167b4,Principality Premiership,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Principality Premiership,Wales,FALSE,1,Other Club League
+7527e849-f9fd-4b2c-8919-c3d76ee0087e,Queensland Premier Rugby,20/02/2019 14:14,20/02/2019 14:14,3,Mens,southern,Queensland Premier Rugby,Australia,FALSE,1,Other Club League
+99066428-d9f3-4d09-813c-b730c2797fef,Romania SuperLiga,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Romania SuperLiga,Romania,FALSE,1,Other Club League
+429552d4-4c1c-40d0-8902-b1b76635a1fa,Russia Premier League,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Russia Premier League,Russia,FALSE,1,Other Club League
+5276f62a-428a-4f02-9f29-7913ef00a5d1,Scotland Super6,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,Scotland Super6,Scotland,FALSE,1,Other Club League
+1fe03390-c49e-48da-b101-cbece0039968,Scottish Premiership,13/04/2020 17:50,13/04/2020 17:50,4,Mens,northern,Scottish Premiership,Scotland,FALSE,1,Other Club League
+ab1959c0-41be-4e55-8dd7-87f40892520a,Spain Division De Honour,13/04/2020 17:50,13/04/2020 17:50,2.5,Mens,northern,Spain Division De Honour,Spain,FALSE,1,Other Club League
+fc830e25-5e94-4be8-aef4-075810c893c2,Super Liga Americana,13/04/2020 17:50,13/04/2020 17:50,2,Mens,southern,Super Liga Americana,South America,FALSE,1,Other Club League
+95ab3fbf-4670-4405-8025-6c65efce65d7,SuperSport,13/04/2020 17:50,13/04/2020 17:50,4,Mens,southern,SuperSport,South Africa,FALSE,1,Other Club League
+d1ab7c83-e333-423f-8470-237a8467e01d,URBA Top 12,20/02/2019 14:14,20/02/2019 14:14,3,Mens,southern,URBA Top 12,South America,FALSE,1,Other Club League
+76982f54-479c-4a84-a27e-a618386529a1,USA Pro Rugby,13/04/2020 17:50,13/04/2020 17:50,3,Mens,northern,USA Pro Rugby,USA,FALSE,1,Other Club League
+69397a9a-19ef-4d82-bc86-370baf9c53c3,Vodacom Cup,13/04/2020 17:50,13/04/2020 17:50,4,Mens,southern,Vodacom Cup,South Africa,FALSE,1,Other Club League
+4d148966-2365-4a01-9448-c1190b7d08c8,Farah Palmer Cup,20/02/2019 14:14,20/02/2019 14:14,2,Womens,southern,Farah Palmer Cup,New Zealand,FALSE,1,Other Club League Women
+d7f8a8fd-244d-4b35-9f9d-f898f5e8964a,Premier 15s Women,21/01/2021 12:21,21/01/2021 12:21,2,Womens,northern,Premier 15s Women,UK,FALSE,1,Other Club League Women
+cd7e1345-a727-4fed-a3a9-617203745ba9,Super W Women,13/04/2020 17:50,13/04/2020 17:50,2,Womens,southern,Super W Women,Australia,FALSE,1,Other Club League Women
+5a15b335-c65a-4878-96b6-41f90e785dad,ProD2,20/02/2019 14:14,20/02/2019 14:14,3,Mens,northern,ProD2,France,FALSE,1,ProD2
+6fcfb116-d342-4080-8bd8-fd080b462ef4,Shute Shield,20/02/2019 14:14,20/02/2019 14:14,3,Mens,southern,Shute Shield,Australia,FALSE,1,Shute Shield
+7ad4f3cc-83e4-45f4-8391-94360198d64f,Super Rugby,20/02/2019 14:14,20/02/2019 14:14,2,Mens,southern,Super Rugby,World,FALSE,1,Super Rugby
+d4c72439-882a-4ac5-9f95-d306ed321ccc,TOP 14,20/02/2019 14:14,20/02/2019 14:14,2,Mens,northern,TOP 14,France,FALSE,1,TOP 14
+f081b233-551c-4948-8840-29251e1952d3,United Rugby Championship,20/02/2019 14:14,20/02/2019 14:14,2,Mens,northern,United Rugby Championship,World,FALSE,1,United Rugby Championship
